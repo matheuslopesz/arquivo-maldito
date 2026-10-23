@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arquivo Maldito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=VT323&family=Rock+Salt&family=Creepster&display=swap">
+<style>
+/* Layout: arquivo pessoal de locadora de terror — colagem de objetos na capa, grades de polaroids de continuidade e capas de VHS, menu em 4 colunas. Tema único escuro, de propósito. */
+:root {
+  color-scheme: dark;
+  --void: #111010;        /* fundo, quase preto */
+  --bone: #efe9df;        /* texto, branco-osso */
+  --ash: #8b857c;
+  --blood: #a5000b;       /* sangue cenográfico */
+  --blood-hi: #e0131f;
+  --slime: #8dff2c;       /* verde radioativo, OSD do VHS */
+  --vhs: #ff2bd0;         /* magenta de tracking */
+  --sodium: #ffb81c;      /* luz de poste / etiqueta de locadora */
+  --paper: #f3eee2;       /* moldura de polaroid */
+
+  --f-serif: "Instrument Serif", "Times New Roman", Georgia, serif;
+  --f-osd: "VT323", "Courier New", ui-monospace, monospace;
+  --f-hand: "Rock Salt", "Comic Sans MS", cursive;
+  --f-gore: "Creepster", "Impact", fantasy;
+
+  --gl: max(16px, env(safe-area-inset-left, 0px));
+  --gr: max(16px, env(safe-area-inset-right, 0px));
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--void); color: var(--bone); font-family: var(--f-serif); font-size: 1.25rem; line-height: 1.15; overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--void); }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--slime); outline-offset: 3px; }
+.wrap { padding-left: var(--gl); padding-right: var(--gr); }
+
+/* scanlines + grão em tudo */
+.crt { position: fixed; inset: 0; z-index: 50; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px); mix-blend-mode: multiply; }
+.crt::after { content: ""; position: absolute; inset: -50%; opacity: .07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: noise .4s steps(3) infinite; }
+@keyframes noise { 33% { transform: translate(-3%, 2%); } 66% { transform: translate(2%, -3%); } }
+
+/* ---------- menu ---------- */
+.menu { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+  padding-block: 18px; background: linear-gradient(var(--void) 70%, transparent); }
+.menu a { font-size: clamp(1rem, .6rem + 1.6vw, 2.2rem); text-transform: uppercase; letter-spacing: -.01em; line-height: 1; transition: color .2s; }
+.menu a:hover, .menu a[aria-current="true"] { color: var(--blood-hi); }
+.menu a:hover { text-shadow: 2px 0 var(--vhs), -2px 0 var(--slime); }
+
+/* ---------- OSD do VHS ---------- */
+.osd { position: fixed; z-index: 45; left: calc(var(--gl) + 4px); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); font-family: var(--f-osd); font-size: 1.6rem; color: var(--slime);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--slime) 70%, transparent); letter-spacing: .04em; pointer-events: none; }
+.osd b { font-weight: 400; animation: blink 1s steps(2, start) infinite; }
+@keyframes blink { to { visibility: hidden; } }
+
+/* ---------- capa / colagem ---------- */
+.cover { position: relative; aspect-ratio: 16 / 8.6; max-width: 100%; margin-top: -8px; }
+.cover > * { position: absolute; }
+.title { left: 50%; top: 52%; translate: -50% -50%; z-index: 5; margin: 0; text-align: center; font-weight: 400; font-size: clamp(3.4rem, 1rem + 9vw, 11rem); line-height: .78; letter-spacing: -.02em; white-space: nowrap; }
+.title span { display: block; }
+.title .drip { color: var(--blood-hi); font-style: italic; position: relative; }
+.title .drip::after { content: ""; position: absolute; left: 12%; right: 10%; top: 88%; height: .5em; background: var(--blood-hi);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50' preserveAspectRatio='none'%3E%3Cpath d='M0 0h200v4c-6 0-7 10-9 22s-6 12-7 0-3-20-8-20-5 6-6 14-3 9-4 0-3-12-8-12-6 26-9 34-7 8-8-2-2-30-9-30-5 9-6 18-4 8-5-1-4-17-10-17-7 12-8 26-5 12-6-1-1-23-9-23-6 6-7 12-4 5-5-2-3-8-9-8-7 20-9 30-6 7-7-3-2-25-10-25-5 3-6 8-3 4-4-1-2-6-8-6-6 10-7 18-4 6-5-2-2-14-8-14-6 8-8 10H0z'/%3E%3C/svg%3E") top / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50' preserveAspectRatio='none'%3E%3Cpath d='M0 0h200v4c-6 0-7 10-9 22s-6 12-7 0-3-20-8-20-5 6-6 14-3 9-4 0-3-12-8-12-6 26-9 34-7 8-8-2-2-30-9-30-5 9-6 18-4 8-5-1-4-17-10-17-7 12-8 26-5 12-6-1-1-23-9-23-6 6-7 12-4 5-5-2-3-8-9-8-7 20-9 30-6 7-7-3-2-25-10-25-5 3-6 8-3 4-4-1-2-6-8-6-6 10-7 18-4 6-5-2-2-14-8-14-6 8-8 10H0z'/%3E%3C/svg%3E") top / 100% 100% no-repeat;
+  animation: drip 2.4s .4s cubic-bezier(.5,0,.2,1) both; transform-origin: top; }
+@keyframes drip { from { transform: scaleY(.15); } }
+
+.obj { transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .3s; filter: drop-shadow(0 18px 22px rgba(0,0,0,.6)); }
+.obj:hover { transform: rotate(0deg) scale(1.06) !important; z-index: 8; filter: drop-shadow(3px 0 0 var(--vhs)) drop-shadow(-3px 0 0 var(--slime)) drop-shadow(0 22px 26px rgba(0,0,0,.7)); }
+
+/* fita VHS */
+.vhs { left: 3%; top: 30%; width: 25%; aspect-ratio: 187 / 103; transform: rotate(-9deg); background: linear-gradient(#232222, #0b0b0b); border-radius: 4px; padding: 6% 7%; display: grid; grid-template-rows: auto 1fr; gap: 6%; }
+.vhs .label { background: var(--paper); color: #1a1a1a; font-family: var(--f-hand); font-size: clamp(.45rem, .2rem + .7vw, .9rem); padding: 4% 6%; border-top: 6px solid var(--blood); line-height: 1.4; transform: rotate(-.6deg); }
+.vhs .window { background: #050505; border-radius: 3px; display: flex; justify-content: space-around; align-items: center; border: 2px solid #2d2c2c; }
+.vhs .reel { width: 28%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #e8e2d6 0 22%, #2b201b 23% 100%); box-shadow: inset 0 0 0 3px #3b3b3b; }
+
+/* post-it de sangue */
+.note { left: 20%; top: 2%; width: 17%; aspect-ratio: 1; background: var(--sodium); color: #2a1503; transform: rotate(7deg); padding: 6%; font-family: var(--f-hand); font-size: clamp(.5rem, .2rem + .85vw, 1.1rem); line-height: 1.5; box-shadow: inset 0 -14px 18px rgba(0,0,0,.08); }
+.note::after { content: ""; position: absolute; right: 12%; top: 44%; width: 36%; aspect-ratio: 1; border-radius: 47% 53% 42% 58% / 52% 41% 59% 48%; background: radial-gradient(circle at 40% 35%, var(--blood-hi), var(--blood) 60%); opacity: .9; }
+.note::before { content: ""; position: absolute; right: 28%; top: 72%; width: 5%; height: 34%; background: var(--blood); border-radius: 0 0 99px 99px; }
+
+/* polaroid de continuidade */
+.pola { left: 62%; top: 6%; width: 15%; aspect-ratio: 88 / 107; background: var(--paper); padding: 5% 5% 24%; transform: rotate(-6deg); }
+.pola .ph { height: 100%; }
+.pola small { position: absolute; left: 7%; right: 7%; bottom: 5%; font-family: var(--f-hand); font-size: clamp(.4rem, .15rem + .65vw, .85rem); color: #222; display: flex; justify-content: space-between; }
+.tape { position: absolute; width: 44%; height: 12%; background: rgba(240, 230, 200, .55); top: -5%; left: 28%; transform: rotate(-4deg); }
+
+/* ingresso */
+.ticket { left: 76%; top: 52%; width: 21%; aspect-ratio: 2.3; background: var(--blood); color: var(--paper); transform: rotate(8deg); display: grid; grid-template-columns: 1fr auto; font-family: var(--f-osd); line-height: 1;
+  -webkit-mask: radial-gradient(circle at 0 50%, transparent 7%, #000 7.5%) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 7%, #000 7.5%) right / 51% 100% no-repeat;
+          mask: radial-gradient(circle at 0 50%, transparent 7%, #000 7.5%) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 7%, #000 7.5%) right / 51% 100% no-repeat; }
+.ticket .main { padding: 8% 6% 8% 12%; display: flex; flex-direction: column; justify-content: center; gap: 4px; font-size: clamp(.6rem, .25rem + 1vw, 1.3rem); text-transform: uppercase; }
+.ticket .main strong { font-family: var(--f-gore); font-weight: 400; font-size: 1.7em; letter-spacing: .03em; color: var(--sodium); }
+.ticket .stub { border-left: 2px dashed rgba(255,255,255,.5); padding: 0 1.2em 0 .8em; writing-mode: vertical-rl; display: grid; place-items: center; font-size: clamp(.55rem, .2rem + .8vw, 1.05rem); }
+
+/* adesivo de locadora */
+.sticker { left: 30%; top: 70%; width: 10%; aspect-ratio: 1; border-radius: 50%; background: var(--slime); color: #0d1a00; transform: rotate(-14deg); display: grid; place-items: center; text-align: center; font-family: var(--f-osd); font-size: clamp(.5rem, .2rem + .8vw, 1.1rem); line-height: .95; text-transform: uppercase; padding: 12%; border: 3px dashed #0d1a00; outline: 4px solid var(--slime); }
+
+/* contas de letra (osso) */
+.beads { left: 6%; top: 4%; width: 16%; display: flex; flex-wrap: wrap; gap: 4px; transform: rotate(-12deg); }
+.beads i { width: clamp(16px, 2.4vw, 38px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #d7cfc0 60%, #9d9484); color: var(--blood); display: grid; place-items: center; font-style: normal; font-family: var(--f-serif); font-weight: 700; font-size: clamp(.6rem, .3rem + .9vw, 1.2rem); box-shadow: 0 3px 6px rgba(0,0,0,.6); }
+.beads i:nth-child(even) { translate: 0 30%; }
+
+/* fita de isolamento */
+.caution { left: -4%; right: -4%; top: 88%; height: 7%; transform: rotate(-3.5deg); z-index: 6; background: repeating-linear-gradient(-45deg, var(--sodium) 0 22px, #111 22px 44px); display: flex; align-items: center; overflow: hidden; }
+.caution span { background: var(--sodium); color: #111; font-family: var(--f-osd); font-size: clamp(.7rem, .3rem + 1.2vw, 1.6rem); white-space: nowrap; padding-inline: .6em; margin-inline: 4%; letter-spacing: .08em; }
+
+/* aranha de plástico */
+.spider { left: 52%; top: 72%; width: 7%; transform: rotate(22deg); color: #050505; }
+.spider:hover { animation: crawl .6s steps(2) 2; }
+@keyframes crawl { 50% { translate: 6px -4px; } }
+
+/* fita cassete de mixtape */
+.mix { left: 81%; top: 10%; width: 15%; aspect-ratio: 1.6; background: var(--vhs); transform: rotate(12deg); border-radius: 6px; padding: 7%; display: grid; grid-template-rows: auto 1fr; gap: 8%; }
+.mix .lab { background: var(--paper); color: #111; font-family: var(--f-hand); font-size: clamp(.4rem, .15rem + .6vw, .8rem); padding: 3% 6%; }
+.mix .holes { background: #1b1b1b; border-radius: 99px; display: flex; justify-content: space-around; align-items: center; }
+.mix .holes i { width: 22%; aspect-ratio: 1; border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 4px #111; }
+
+/* ---------- fotos placeholder ---------- */
+.ph { position: relative; overflow: hidden; background: #222; }
+.ph::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,.55)); mix-blend-mode: multiply; }
+.g1 { background: radial-gradient(40% 45% at 50% 42%, #d7a48b, #6b2f24 60%, transparent 61%), radial-gradient(30% 20% at 50% 75%, var(--blood), transparent 70%), linear-gradient(#2d3a2a, #0f130d); }
+.g2 { background: radial-gradient(35% 40% at 45% 40%, #a6b89a, #3c4a35 60%, transparent 62%), linear-gradient(160deg, #1b1f3a, #070709); }
+.g3 { background: radial-gradient(38% 42% at 52% 45%, #f0d2c3, #b56c58 55%, transparent 58%), radial-gradient(18% 10% at 52% 60%, #7a0008, transparent 80%), linear-gradient(#4a1418, #120607); }
+.g4 { background: radial-gradient(45% 50% at 40% 50%, #e9e2d4, #8e8678 55%, transparent 57%), linear-gradient(200deg, #3a2a10, #0c0906); }
+.g5 { background: radial-gradient(36% 40% at 55% 42%, #7fb0a2, #24423a 60%, transparent 62%), radial-gradient(60% 30% at 50% 100%, var(--slime), transparent 70%), #08100c; }
+.g6 { background: radial-gradient(40% 44% at 48% 44%, #caa07c, #5a3420 55%, transparent 57%), repeating-linear-gradient(90deg, #1a0c0c 0 18px, #250f10 18px 36px); }
+.g7 { background: linear-gradient(180deg, #ff6b1a 0%, #7a0b3c 45%, #12051a 75%), #000; }
+.g8 { background: radial-gradient(25% 60% at 70% 60%, #000, transparent 70%), linear-gradient(180deg, #2c4a6b, #0a0f1a 70%); }
+.g9 { background: radial-gradient(60% 40% at 50% 30%, #3dff9b55, transparent), linear-gradient(170deg, #1d2b18, #050805); }
+
+/* ---------- arquivo (seções) ---------- */
+.archive { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); gap: clamp(24px, 4vw, 64px); padding-block: clamp(70px, 10vw, 140px) 40px; }
+.archive aside { position: sticky; top: 90px; align-self: start; display: grid; gap: 28px; }
+.archive h2 { margin: 0; font-weight: 400; font-size: clamp(3.4rem, 1.6rem + 6vw, 8rem); line-height: .78; letter-spacing: -.02em; text-wrap: balance; }
+.archive h2 em { color: var(--blood-hi); }
+.archive aside p { margin: 0; max-width: 18ch; font-size: 1.3rem; line-height: 1.05; }
+.archive aside .rental { font-family: var(--f-osd); font-size: 1.25rem; color: var(--sodium); border: 1px dashed var(--sodium); padding: 8px 10px; max-width: 22ch; line-height: 1.05; text-transform: uppercase; }
+
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 4vw, 64px) clamp(18px, 3vw, 44px); align-items: start; }
+.item { display: grid; gap: 10px; justify-items: center; text-align: center; }
+.item .cap { font-size: clamp(1.3rem, .9rem + 1vw, 2rem); line-height: .92; }
+.item .cap span { display: block; font-size: .95em; }
+
+/* polaroid de continuidade (grade) */
+.cont { width: 100%; background: var(--paper); padding: 6% 6% 22%; position: relative; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.cont .ph { aspect-ratio: 1 / 1.02; }
+.cont .scr { position: absolute; left: 7%; right: 7%; bottom: 4%; display: flex; justify-content: space-between; align-items: end; font-family: var(--f-hand); color: #1d1d1d; font-size: clamp(.55rem, .3rem + .6vw, .9rem); line-height: 1.2; text-align: left; }
+.cont .side { position: absolute; right: 2%; top: 10%; writing-mode: vertical-rl; font-family: var(--f-hand); font-size: clamp(.5rem, .3rem + .55vw, .85rem); color: var(--blood); }
+.grid .item:nth-child(3n+1) .cont { transform: rotate(-2.2deg); }
+.grid .item:nth-child(3n+2) .cont { transform: rotate(1.4deg) translateY(18px); }
+.grid .item:nth-child(3n) .cont { transform: rotate(-.6deg) translateY(-12px); }
+.item:hover .cont, .item:hover .box { transform: rotate(0) scale(1.03) !important; }
+.item:hover .ph { filter: drop-shadow(2px 0 0 var(--vhs)) contrast(1.15); }
+
+/* capa de VHS (grade "sets") */
+.box { width: 100%; aspect-ratio: 104 / 188; position: relative; overflow: hidden; border-radius: 3px; background: #0b0b0b; transition: transform .45s cubic-bezier(.2,.8,.2,1); box-shadow: 0 20px 30px rgba(0,0,0,.6), inset -10px 0 0 rgba(255,255,255,.04); }
+.box .ph { position: absolute; inset: 0; }
+.box .t { position: absolute; left: 8%; right: 8%; top: 9%; z-index: 2; font-family: var(--f-gore); font-size: clamp(1.4rem, .8rem + 1.9vw, 3rem); line-height: .9; color: var(--bone); text-shadow: 0 3px 0 var(--blood), 0 0 20px rgba(0,0,0,.8); text-align: center; }
+.box .rate { position: absolute; z-index: 2; left: 8%; bottom: 5%; font-family: var(--f-osd); font-size: .95rem; background: var(--bone); color: #111; padding: 1px 6px; }
+.box .price { position: absolute; z-index: 2; right: 6%; bottom: 8%; width: 30%; aspect-ratio: 1; border-radius: 50%; background: var(--sodium); color: #111; display: grid; place-items: center; font-family: var(--f-osd); font-size: clamp(.8rem, .5rem + .6vw, 1.1rem); line-height: .9; transform: rotate(-12deg); text-align: center; }
+.box .rental-band { position: absolute; z-index: 2; left: 0; right: 0; top: 58%; background: var(--blood); color: var(--bone); font-family: var(--f-osd); font-size: .95rem; text-align: center; letter-spacing: .12em; transform: rotate(-2deg); }
+.grid .item:nth-child(3n+1) .box { transform: rotate(1.6deg); }
+.grid .item:nth-child(3n+2) .box { transform: rotate(-1.4deg) translateY(16px); }
+.grid .item:nth-child(3n) .box { transform: rotate(.8deg); }
+
+/* ---------- contato ---------- */
+.contact { padding-block: clamp(80px, 12vw, 160px) clamp(90px, 10vw, 140px); display: grid; gap: 30px; }
+.contact h2 { margin: 0; font-weight: 400; font-size: clamp(3.4rem, 1rem + 10vw, 12rem); line-height: .8; letter-spacing: -.02em; }
+.contact h2 em { color: var(--blood-hi); }
+.card { justify-self: start; max-width: 100%; width: min(560px, 100%); background: var(--paper); color: #141414; padding: 22px 22px 18px; transform: rotate(-1.5deg); position: relative; }
+.card::before { content: "CARTÃO DE SÓCIO Nº 0666"; display: block; font-family: var(--f-osd); font-size: 1.15rem; letter-spacing: .1em; color: var(--blood); border-bottom: 2px solid var(--blood); padding-bottom: 6px; margin-bottom: 14px; }
+.card dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 16px; align-items: baseline; }
+.card dt { font-family: var(--f-osd); font-size: 1.05rem; text-transform: uppercase; color: #6d665c; }
+.card dd { margin: 0; font-family: var(--f-hand); font-size: clamp(.8rem, .6rem + .5vw, 1.05rem); overflow-wrap: anywhere; }
+.card dd a:hover { color: var(--blood); }
+.copy { margin-top: 16px; font: inherit; font-family: var(--f-osd); font-size: 1.2rem; text-transform: uppercase; background: var(--blood); color: var(--paper); border: 0; padding: 6px 14px; cursor: pointer; }
+.copy:hover { background: #111; }
+footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-block: 18px 70px; color: var(--ash); font-family: var(--f-osd); font-size: 1.15rem; border-top: 1px solid #2a2828; }
+
+/* ---------- responsivo ---------- */
+@media (max-width: 900px) {
+  .archive { grid-template-columns: minmax(0, 1fr); }
+  .archive aside { position: static; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid .item .cont, .grid .item .box { transform: rotate(-1deg) !important; }
+  .grid .item:nth-child(even) .cont, .grid .item:nth-child(even) .box { transform: rotate(1.2deg) !important; }
+}
+@media (max-width: 640px) {
+  .cover { aspect-ratio: 3 / 4.2; }
+  .title { top: 46%; font-size: clamp(3rem, 17vw, 6rem); }
+  .vhs { left: -2%; top: 60%; width: 52%; }
+  .note { left: 6%; top: 10%; width: 34%; }
+  .pola { left: 60%; top: 4%; width: 33%; }
+  .ticket { left: 48%; top: 68%; width: 50%; }
+  .sticker { left: 70%; top: 30%; width: 24%; }
+  .beads { left: 4%; top: 1%; width: 50%; }
+  .mix { display: none; }
+  .spider { left: 14%; top: 34%; width: 14%; }
+  .caution { top: 91%; height: 5%; }
+  .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 8px; }
+  .grid { grid-template-columns: minmax(0, 1fr); padding-inline: 6%; }
+  .osd { font-size: 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="crt" aria-hidden="true"></div>
+<div class="osd" aria-hidden="true"><b>▶</b> PLAY &nbsp;SP &nbsp;<span id="ctr">0:00:00</span></div>
+
+<nav class="menu wrap" aria-label="Seções">
+  <a href="#inicio">Início</a>
+  <a href="#elenco">O Elenco</a>
+  <a href="#sets">Os Sets</a>
+  <a href="#contato">Contato</a>
+</nav>
+
+<main>
+  <div class="cover wrap" id="inicio">
+    <div class="obj beads" aria-hidden="true"><i>N</i><i>O</i><i>M</i><i>E</i><i>★</i><i>†</i><i>X</i></div>
+
+    <div class="obj note">não esquecer: 4 litros de sangue falso + látex</div>
+
+    <div class="obj vhs" aria-hidden="true">
+      <div class="label">MAQUIAGEM SFX<br>vol. 3 — NÃO APAGAR</div>
+      <div class="window"><span class="reel"></span><span class="reel"></span></div>
+    </div>
+
+    <h1 class="title"><span>Arquivo</span><span class="drip">Maldito</span></h1>
+
+    <div class="obj pola">
+      <span class="tape"></span>
+      <div class="ph g3"></div>
+      <small><span>CENA 13</span><span>TK 2</span></small>
+    </div>
+
+    <div class="obj mix" aria-hidden="true">
+      <div class="lab">trilha do set ☠ lado A</div>
+      <div class="holes"><i></i><i></i></div>
+    </div>
+
+    <div class="obj ticket">
+      <div class="main"><span>Sessão da</span><strong>Meia-Noite</strong><span>Fila Z · Poltrona 13</span></div>
+      <div class="stub">ADMIT ONE</div>
+    </div>
+
+    <div class="obj sticker">Rebobine antes de devolver</div>
+
+    <svg class="obj spider" viewBox="0 0 100 80" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+      <ellipse cx="50" cy="44" rx="13" ry="16"/><circle cx="50" cy="24" r="9"/>
+      <g fill="none"><path d="M40 38 22 22 6 30"/><path d="M39 44 18 40 4 52"/><path d="M40 50 22 58 10 76"/><path d="M42 54 32 70 26 80"/>
+      <path d="M60 38 78 22 94 30"/><path d="M61 44 82 40 96 52"/><path d="M60 50 78 58 90 76"/><path d="M58 54 68 70 74 80"/></g>
+      <circle cx="46" cy="22" r="2" fill="#a5000b" stroke="none"/><circle cx="54" cy="22" r="2" fill="#a5000b" stroke="none"/>
+    </svg>
+
+    <div class="caution" aria-hidden="true">
+      <span>NÃO ULTRAPASSE — SET DE FILMAGEM</span><span>NÃO ULTRAPASSE — SET DE FILMAGEM</span><span>NÃO ULTRAPASSE — SET DE FILMAGEM</span><span>NÃO ULTRAPASSE — SET DE FILMAGEM</span>
+    </div>
+  </div>
+
+  <!-- O ELENCO: maquiagem / caracterização -->
+  <section class="archive wrap" id="elenco">
+    <aside>
+      <h2>O<br><em>Elenco</em></h2>
+      <p>Breve descrição dos trabalhos de maquiagem e caracterização.</p>
+      <div class="rental">Polaroids de continuidade · não tirar do camarim</div>
+    </aside>
+    <div class="grid">
+      <figure class="item" style="margin:0">
+        <div class="cont"><div class="ph g1"></div><span class="side">D-5 · zumbi #4</span><div class="scr"><span>CENA 22<br>TK 2</span><span>ferida lado esq.</span></div></div>
+        <figcaption class="cap">Nome, Local<span>1998</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="cont"><div class="ph g2"></div><span class="side">N-2</span><div class="scr"><span>CENA 34</span><span>pós-ataque</span></div></div>
+        <figcaption class="cap">Nome, Local<span>1987</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="cont"><div class="ph g3"></div><span class="side">sangue: 2x</span><div class="scr"><span>2/10/89</span><span>noite fora</span></div></div>
+        <figcaption class="cap">Nome, Local<span>1989</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="cont"><div class="ph g4"></div><span class="side">prótese 3</span><div class="scr"><span>CENA 7<br>TK 5</span><span>envelhecer +40</span></div></div>
+        <figcaption class="cap">Nome, Local<span>1993</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="cont"><div class="ph g5"></div><span class="side">D-11</span><div class="scr"><span>CENA 41</span><span>gosma verde</span></div></div>
+        <figcaption class="cap">Nome, Local<span>1985</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="cont"><div class="ph g6"></div><span class="side">dublê</span><div class="scr"><span>CENA 9<br>TK 1</span><span>queimadura 2º</span></div></div>
+        <figcaption class="cap">Nome, Local<span>1996</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- OS SETS: audiovisual / produção -->
+  <section class="archive wrap" id="sets">
+    <aside>
+      <h2>Os<br><em>Sets</em></h2>
+      <p>Breve descrição das produções e dos filmes.</p>
+      <div class="rental">Prateleira de lançamentos · devolução em 24h</div>
+    </aside>
+    <div class="grid">
+      <figure class="item" style="margin:0">
+        <div class="box"><div class="ph g7"></div><div class="t">Título do Filme</div><span class="rental-band">LANÇAMENTO</span><span class="rate">18 ANOS</span><span class="price">R$<br>2,50</span></div>
+        <figcaption class="cap">Cidade, País<span>1984</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="box"><div class="ph g8"></div><div class="t">Título do Clipe</div><span class="rate">16 ANOS</span><span class="price">R$<br>1,90</span></div>
+        <figcaption class="cap">Cidade, País<span>1991</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="box"><div class="ph g9"></div><div class="t">Título da Série</div><span class="rental-band">EDIÇÃO DO DIRETOR</span><span class="rate">18 ANOS</span><span class="price">R$<br>3,00</span></div>
+        <figcaption class="cap">Cidade, País<span>1988</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="box"><div class="ph g2"></div><div class="t">Título do Comercial</div><span class="rate">LIVRE</span><span class="price">R$<br>1,50</span></div>
+        <figcaption class="cap">Cidade, País<span>1995</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="box"><div class="ph g6"></div><div class="t">Título do Curta</div><span class="rental-band">PROIBIDO EM 3 PAÍSES</span><span class="rate">18 ANOS</span><span class="price">R$<br>2,00</span></div>
+        <figcaption class="cap">Cidade, País<span>1986</span></figcaption>
+      </figure>
+      <figure class="item" style="margin:0">
+        <div class="box"><div class="ph g5"></div><div class="t">Título do Doc</div><span class="rate">14 ANOS</span><span class="price">R$<br>1,90</span></div>
+        <figcaption class="cap">Cidade, País<span>1999</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="contact wrap" id="contato">
+    <h2>Fale <em>se tiver</em><br>coragem</h2>
+    <div class="card">
+      <dl>
+        <dt>Nome</dt><dd>Nome Sobrenome</dd>
+        <dt>E-mail</dt><dd id="email">contato@seudominio.com</dd>
+        <dt>Insta</dt><dd><a href="https://instagram.com" target="_blank" rel="noopener">@seuperfil</a></dd>
+        <dt>Cidade</dt><dd>São Paulo, BR</dd>
+      </dl>
+      <button class="copy" type="button" id="copy">Copiar e-mail</button>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Nome Sobrenome</span>
+  <span>FIM ▮▮ REBOBINANDO…</span>
+</footer>
+
+<script>
+// contador do VHS
+(() => {
+  const el = document.getElementById('ctr'), t0 = Date.now(), p = n => String(n).padStart(2, '0');
+  setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); el.textContent = `${Math.floor(s / 3600)}:${p(Math.floor(s / 60) % 60)}:${p(s % 60)}`; }, 1000);
+})();
+
+// menu ativo conforme a rolagem
+(() => {
+  const links = [...document.querySelectorAll('.menu a')];
+  const secs = links.map(a => document.querySelector(a.getAttribute('href')));
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) links.forEach(a => a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + e.target.id)));
+  }), { rootMargin: '-45% 0px -50% 0px' });
+  secs.forEach(s => s && io.observe(s));
+})();
+
+// copiar e-mail
+document.getElementById('copy').addEventListener('click', e => {
+  const btn = e.currentTarget, node = document.getElementById('email');
+  const done = m => { btn.textContent = m; setTimeout(() => btn.textContent = 'Copiar e-mail', 1800); };
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents(node); const s = getSelection(); s.removeAllRanges(); s.addRange(r); done('Selecionado'); };
+  navigator.clipboard ? navigator.clipboard.writeText(node.textContent).then(() => done('Copiado'), fallback) : fallback();
+});
+</script>
+</body>
+</html>
